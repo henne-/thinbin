@@ -4,7 +4,7 @@
 
 var Hapi = require('hapi'),
     ConfigFactory = require(__dirname + '/app/services/configFactory.js'),
-    FileService = require(__dirname + '/app/services/fileService.js');
+    FileService;
 
 // Application Start
 
@@ -15,13 +15,13 @@ ConfigFactory
     .then(startApplication, showError);
 
 function startApplication(config) {
+    FileService = require(__dirname + '/app/services/fileService.js');
 
     var hostname = config.get('hostname'),
         port     = config.get('port');
 
     console.log('hostname: \t', hostname);
     console.log('port: \t\t', port);
-
 
     server.connection({
         host: hostname,

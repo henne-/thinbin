@@ -1,5 +1,5 @@
 angular.module('io.risu.thinbin.core')
-    .factory('FileService', ['$location', 'SettingService', 'Restangular', function ($location, SettingService, Restangular) {
+    .factory('FileService', ['$location', 'SettingService', 'Restangular', '$upload', function ($location, SettingService, Restangular, $upload) {
 
         // helpers
 
@@ -22,22 +22,34 @@ angular.module('io.risu.thinbin.core')
 
         // public api functions
 
-        function savePlaintextFile(filedata) {
+        function savePlaintextFile(formdata) {
             return Restangular
-                    .service('file')
-                    .post(filedata)
-                    .then(decorateFile);
+                .service('file')
+                .post(formdata)
+                .then(decorateFile);
+        }
+
+        function saveBinaryFile(formdata, upload) {
+
+            return $upload.upload({
+                url: '/api/file',
+                method: 'POST',
+                data: formdata,
+                file: upload,
+                fileName: upload.name
+            });
         }
 
         function readPlaintextFileById(fileId) {
             return Restangular
-                        .one('file', fileId)
-                        .get()
-                        .then(decorateFile);
+                .one('file', fileId)
+                .get()
+                .then(decorateFile);
         }
 
         return {
             savePlaintextFile: savePlaintextFile,
-            readPlaintextFileById: readPlaintextFileById
+            readPlaintextFileById: readPlaintextFileById,
+            saveBinaryFile: saveBinaryFile
         }
     }]);

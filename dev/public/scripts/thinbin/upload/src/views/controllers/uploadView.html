@@ -7,37 +7,62 @@
     </ol>
 
     <form name="uploadForm" ng-submit="onFormSubmit()" novalidate ng-class="{disabled: isProcessing}">
-        <div class="plaintext method-panel">
 
-            <div class="content row">
+        <div class="method-panel">
+
+            <div class="plaintext content row" ng-if="uploadForm.data.filetype === 'text/plain'">
                 <div class="twelve columns">
-                    <h4>Risu Thinbin Upload</h4>
+                    <h4>Plaintext Upload</h4>
                     <textarea id="content" class="u-full-width"
-                              placeholder="Paste your content here." ng-model="uploadForm.plaintext.content"></textarea>
+                              placeholder="Paste your content here." ng-model="uploadForm.data.content"></textarea>
+                </div>
+            </div>
+
+            <div class="binary content row" ng-if="uploadForm.data.filetype === 'application/octet-stream'">
+                <div class="twelve columns">
+                    <h4>Binary Upload</h4>
+
+                    <div class="panel">
+
+                        <h5 class="instruction" ng-if="!file">
+                            Please Select a File to Upload<br/>
+                            <small>(or just drag'n'drop a file in this box)</small>
+                        </h5>
+                        <h5 class="instruction" ng-if="file">
+                            {{file.name}}<br/>
+                            <small>(You can upload this file now)</small>
+                        </h5>
+
+                        <div class="button button-primay" type="file"
+                        ng-file-select ng-model="uploadForm.data.file"
+                        ng-file-change="onFileSelected($files, $event)"
+                        ng-multiple="false"
+                        accept="*/*">Select File</div>
+
+                    </div>
                 </div>
             </div>
 
             <div class="metadata row">
                 <div class="content-type six columns">
                     <label for="contentTypeSelect">Upload Type</label>
-                    <select class="u-full-width" id="contentTypeSelect" ng-model="uploadForm.plaintext.type" ng-init="uploadForm.plaintext.type = defaultMode">
+                    <select class="u-full-width" id="contentTypeSelect" ng-model="uploadForm.data.filetype" ng-init="uploadForm.data.filetype = defaultMode">
                         <option ng-repeat="(key, value) in displayModes" value="{{value}}" ng-selected="value == defaultMode" >{{key}}</option>
                     </select>
                 </div>
                 <div class="retention six columns">
                     <label for="retentionPeriodSelect">Retention Period</label>
-                    <select class="u-full-width" id="retentionPeriodSelect" ng-model="uploadForm.plaintext.retentionPeriod" ng-init="uploadForm.plaintext.retentionPeriod = defaultRetention">
+                    <select class="u-full-width" id="retentionPeriodSelect" ng-model="uploadForm.data.retentionPeriod" ng-init="uploadForm.data.retentionPeriod = defaultRetention">
                         <option ng-repeat="(key, value) in retentions" value="{{value}}" ng-selected="value == defaultRetention">{{key}}</option>
                     </select>
                 </div>
             </div>
-
         </div>
 
         <div class="commit row">
             <div class="six columns">
                 <label class="contentIsPrivate">
-                    <input type="checkbox" ng-model="uploadForm.plaintext.isPrivate" checked>
+                    <input type="checkbox" ng-model="uploadForm.data.isPrivate" checked="checked" value="true">
                     <span class="label-body">This is a private upload. It won't appear in the public archive.</span>
                 </label>
             </div>

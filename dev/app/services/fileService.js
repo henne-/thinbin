@@ -7,22 +7,16 @@ var PouchDB = require('pouchdb'),
     atob = require('atob'),
     btoa = require('btoa'),
     generateId = require('../utils/generateId')(),
-    ConfigFactory = require('../services/configFactory'),
-    settings;
+    ConfigFactory = require('../services/configFactory');
 
 // module instances
 
-var pouch,
-    settings;
+var settings,
+    pouch;
 
-ConfigFactory
-    .create()
-    .then(function (config) {
-        settings = config;
-        console.log('Using Pouch with: ', config.get('pouchStore'));
-
-        pouch = PouchDB(config.get('pouchStore'));
-    });
+settings = ConfigFactory.instance();
+console.log('Using Pouch with: ', settings.get('pouchStore'));
+pouch = PouchDB(settings.get('pouchStore'));
 
 // private helpers
 
@@ -55,24 +49,44 @@ function validateFileRequirements(filedata) {
         sharedSettings = settings.get('shared'),
         validRetentions = sharedSettings.retentions;
 
+    console.log(filedata);
+
     validRetentions = Object.keys(validRetentions)
         .map(function (key) {
             return validRetentions[key];
         });
 
-    if (!error && filedata.content === undefined) {
-        error = 'Content is not defined.';
+    // filetype description checks
+    if (!error && filedata.filetype === undefined) {
+        error = 'Filetype is missing. Must be binary or plaintext.';
     }
-    if (!error && filedata.content.length > sharedSettings.maxFileSizeBytes) {
-        error = 'Provided content exceeds upload filsize limit.';
+    if (!error && ['text/plain', 'application/octet-stream'].indexOf(filedata.filetype) === -1) {
+        error = 'Wrong filetype. Must be binary or plaintext.';
     }
+
+    // content checks
+
+    if(!error && filedata.filetype === 'text/plain') {
+        if (!error && filedata.content === undefined) {
+            error = 'Content is not defined.';
+        }
+        if (!error && filedata.content.length > sharedSettings.maxFileSizeBytes) {
+            error = 'Provided content exceeds upload filsize limit.';
+        }
+    } else if (!error) {
+        if (!error && filedata.file === undefined) {
+            error = 'File is not defined.';
+        }
+    }
+
+    // retention period checks
     if (!error && isNaN(filedata.retentionPeriod)) {
         error = 'Given retention period is not valid.';
     }
-    if (!filedata.retentionPeriod) {
+    if (!error && filedata.retentionPeriod === undefined) {
         error = 'Retention period is missing.';
     }
-    if (!error && validRetentions.indexOf(filedata.retentionPeriod) == -1) {
+    if (!error && validRetentions.indexOf(filedata.retentionPeriod) === -1) {
         error = 'Given retention period is not available.';
     }
 
@@ -105,7 +119,9 @@ function saveFileById(fileId, filedata) {
         pouch.put({
             _id: fileId,
             _attachments: files,
-            expiresAt: (filedata.retentionPeriod + Date.now())
+            expiresAt: (filedata.retentionPeriod + Date.now()),
+            filetype: filedata.filetype,
+            isPrivate: (filedata.isPrivate === true)
         }).then(function (doc) {
             deferred.resolve(readFile(fileId));
         }).catch(function (err) {
