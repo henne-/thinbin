@@ -3,7 +3,8 @@
 // imports
 
 var Boom = require('boom'),
-    FileService = require('../services/fileService.js');
+    FileService = require('../services/fileService'),
+    ConfigFactory = require('../services/configFactory');
 
 // route handlers
 
@@ -61,7 +62,12 @@ module.exports = [
     {
         path: '/api/file',
         method: 'POST',
-        handler: handlePostFile
+        handler: handlePostFile,
+        config: {
+            payload: {
+                maxBytes: ConfigFactory.instance().get('shared').maxFileSizeBytes
+            }
+        }
     },
     {
         path: '/api/file/{id}/raw',

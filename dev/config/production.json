@@ -34,7 +34,7 @@
         },
         "displayModes": {
             "_plaintext": "text/plain",
-            "_binary": "*/*"
+            "_binary": "application/octet-stream"
         }
     }
 }

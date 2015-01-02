@@ -1,11 +1,35 @@
-.upload.view .method-panel {
-  min-height: 300px;
+.upload.view .method-panel,
+.upload.view .method-panel .binary.content {
+  min-height: 380px;
 }
 
-.upload.view .plaintext.method-panel textarea {
-  height: 300px;
+.upload.view .method-panel .plaintext textarea {
+  height: 380px;
   resize: vertical;
 }
+
+.upload.view .method-panel .binary .panel {
+  border: 1px solid #D1D1D1;
+  height: 36px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  box-shadow: none;
+  background: #fff;
+  height: 300px;
+
+  text-align: center;
+}
+
+.upload.view .method-panel .binary .instruction {
+  margin-top: 10%;
+}
+.upload.view .method-panel .binary .instruction small {
+  color: #D1D1D1;
+  font-size: 15px;
+  font-weight: normal;
+  letter-spacing: 1px;
+}
+
 
 /* submit button state */
 
@@ -13,15 +37,19 @@
   width: 215px;
   display: inherit;
 }
+
 .upload.view form .button.processing {
   display: none;
 }
+
 .upload.view form.disabled input[type="submit"] {
   display: none;
 }
+
 .upload.view form.disabled .button.processing {
   display: inherit;
 }
+
 .upload.view form .button.processing img {
   position: relative;
   left: -5px;

@@ -8,7 +8,8 @@ var Q = require('q'),
 
 // module wide variables
 
-var configDir = path.join(__dirname, '/../../config');
+var configDir = path.join(__dirname, '/../../config'),
+    instance;
 
 // exported functions
 
@@ -30,6 +31,7 @@ function createConfig() {
         if (err) {
             deferred.reject(err);
         } else {
+            instance = conf;
             deferred.resolve(conf);
         }
     });
@@ -37,10 +39,15 @@ function createConfig() {
     return deferred.promise;
 }
 
+function getInstance() {
+    return instance;
+}
+
 // on module loading
 
 console.log('Reading configs from: ', configDir);
 
 module.exports = {
-    create: createConfig
+    create: createConfig,
+    instance: getInstance
 };
