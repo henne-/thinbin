@@ -14,8 +14,15 @@ angular.module('io.risu.thinbin.core')
                 '/'
             ].join('');
 
-            file.viewFileUrl = appUrl + '#/plaintext/' + file.id;
-            file.downloadFileUrl = apiUrl + '/file/' + file.id + '/raw';
+            var fileName = Object.keys(file.files)[0];
+
+            if(file.files[fileName].contentType === 'text/plain') {
+                file.viewFileUrl = appUrl + ['#/show', file.id, fileName].join('/');
+            }
+
+            file.rawFileUrl = [apiUrl, 'file', file.id, fileName].join('/');
+            file.downloadFileUrl = [apiUrl, 'file', file.id, 'download', fileName].join('/');
+
 
             return file;
         }
@@ -40,7 +47,7 @@ angular.module('io.risu.thinbin.core')
             });
         }
 
-        function readPlaintextFileById(fileId) {
+        function readFileById(fileId) {
             return Restangular
                 .one('file', fileId)
                 .get()
@@ -49,7 +56,7 @@ angular.module('io.risu.thinbin.core')
 
         return {
             savePlaintextFile: savePlaintextFile,
-            readPlaintextFileById: readPlaintextFileById,
-            saveBinaryFile: saveBinaryFile
+            saveBinaryFile: saveBinaryFile,
+            readFileById: readFileById
         }
     }]);

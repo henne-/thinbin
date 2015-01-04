@@ -4,15 +4,15 @@ angular.module('io.risu.thinbin.plaintext')
         function ($scope, $routeParams, $http, UploadService, FileService) {
 
             FileService
-                .readPlaintextFileById($routeParams.id)
-                .then(function (file) {
-                    console.log('I READ', file.downloadFileUrl);
-                    $scope.file = file;
-                    $scope.file.expiresAt = moment($scope.file.expiresAt).calendar();
+                .readFileById($routeParams.id)
+                .then(function (archive) {
+                    var fileName = $routeParams.filename,
+                        file = archive.files[fileName];
 
-                    $http.get(file.downloadFileUrl).then(function(response) {
-                        console.log('RESPONSE WAS', response);
+                    $scope.archive = file;
+                    $scope.archive.expiresAt = moment(archive.expiresAt).calendar();
 
+                    $http.get(archive.rawFileUrl).then(function(response) {
                         $scope.source = response.data;
                     })
                 });

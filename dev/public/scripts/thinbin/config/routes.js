@@ -13,7 +13,7 @@ angular.module('io.risu.thinbin')
                 templateUrl: 'scripts/thinbin/upload/src/views/controllers/uploadDoneView.html',
                 controller: 'UploadDoneController'
             })
-            .when('/plaintext/:id', {
+            .when('/show/:id/:filename', {
                 templateUrl: 'scripts/thinbin/plaintext/src/views/controllers/plaintextView.html',
                 controller: 'PlaintextController'
             })

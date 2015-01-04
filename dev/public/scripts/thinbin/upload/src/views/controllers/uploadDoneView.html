@@ -26,19 +26,27 @@
         <div class="twelve columns">
             <table class="urls u-full-width">
                 <tbody>
-                <tr>
+                <tr ng-if="file.viewFileUrl">
                     <td>Thinbin URL</td>
                     <td><strong><a href="{{file.viewFileUrl}}" target="_blank">{{file.viewFileUrl}}</a></strong></td>
                     <td class="button-cell">
-                        <a class="qr button" clip-copy="viewUrl">copy</a>
+                        <a class="qr button" clip-copy="file.viewFileUrl">copy</a>
                         <a class="copy button" ng-click="showQrCode('Thinbin Url', file.viewFileUrl)">qr </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Raw File URL</td>
+                    <td><strong><a href="{{file.rawFileUrl}}" target="_blank">{{file.rawFileUrl}}</a></strong></td>
+                    <td class="button-cell">
+                        <a class="qr button" clip-copy="file.rawFileUrl">copy</a>
+                        <a class="copy button" ng-click="showQrCode('Raw File Url', file.rawFileUrl)">qr </a>
                     </td>
                 </tr>
                 <tr>
                     <td>Download URL</td>
                     <td><strong><a href="{{file.downloadFileUrl}}" target="_blank">{{file.downloadFileUrl}}</a></strong></td>
                     <td class="button-cell">
-                        <a class="qr button" clip-copy="downloadUrl">copy</a>
+                        <a class="qr button" clip-copy="file.downloadFileUrl">copy</a>
                         <a class="copy button" ng-click="showQrCode('Download Url', file.downloadFileUrl)">qr </a>
                     </td>
                 </tr>

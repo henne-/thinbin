@@ -3,7 +3,7 @@
     <div class="content row">
         <div class="six columns">
             <h4>Risu Thinbin</h4>
-            <small>This Upload expires {{file.expiresAt}}</small>
+            <small>This Upload expires {{archive.expiresAt}}</small>
         </div>
         <div>
             <a class="upload button button-primary u-pull-right" href="#/start">new upload</a>
@@ -11,10 +11,9 @@
         </div>
     </div>
 
-    <div class="content row" ng-if="file">
+    <div class="content row" ng-if="archive">
         <div class="twelve columns">
-            <div hljs ng-if="source" source="source">
-            </div>
+            <div hljs ng-if="source" source="source"></div>
         </div>
     </div>
 

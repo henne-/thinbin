@@ -27,7 +27,7 @@ function handleGetRawFile(request, reply) {
     FileService
         .readFile(request.params.id)
         .then(function(file) {
-            fileName = Object.keys(file.files)[0];
+            fileName = request.params.filename;
             contentType = file.files[fileName].contentType;
 
             return FileService.readRawFile(file.id);
@@ -39,6 +39,33 @@ function handleGetRawFile(request, reply) {
             var error = Boom.create(500, 'unexpected error during raw read process');
             reply(error);
         });
+}
+
+function handleGetDownloadFile(request, reply) {
+    var contentType,
+        fileName;
+
+    FileService
+        .readFile(request.params.id)
+        .then(function(file) {
+            fileName = request.params.filename;
+            contentType = file.files[fileName].contentType;
+
+            return FileService.readRawFile(file.id);
+        })
+        .then(function (rawFile) {
+            reply(rawFile)
+                .type(contentType)
+                .header('Content-disposition', 'attachment; filename=' + fileName);
+        })
+        .catch(function () {
+            var error = Boom.create(500, 'unexpected error during raw read process');
+            reply(error);
+        });
+}
+
+function handleGetDownloadArchive(request, reply) {
+    reply('To be implemented');
 }
 
 function handlePostFile(request, reply) {
@@ -101,9 +128,19 @@ module.exports = [
         }
     },
     {
-        path: '/api/file/{id}/raw',
+        path: '/api/file/{id}/{filename}',
         method: 'GET',
         handler: handleGetRawFile
+    },
+    {
+        path: '/api/file/{id}/download/{filename}',
+        method: 'GET',
+        handler: handleGetDownloadFile
+    },
+    {
+        path: '/api/file/{id}/download',
+        method: 'GET',
+        handler: handleGetDownloadArchive
     },
     {
         path: '/api/file/{id}',

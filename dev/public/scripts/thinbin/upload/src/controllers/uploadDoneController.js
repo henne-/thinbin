@@ -7,7 +7,7 @@ angular.module('io.risu.thinbin.upload')
             $scope.qrCodeData = undefined;
 
             FileService
-                .readPlaintextFileById($routeParams.id)
+                .readFileById($routeParams.id)
                 .then(function (file) {
                     $scope.file = file;
                     $scope.file.expiresAt = moment($scope.file.expiresAt).calendar();
