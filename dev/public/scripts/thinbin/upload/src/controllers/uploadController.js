@@ -28,8 +28,6 @@ angular.module('io.risu.thinbin.upload')
             $scope.defaultRetention = $scope.retentions['_24_hours'];
 
             $scope.onFormSubmit = function onSubmitClick() {
-                console.log('AAA', arguments);
-
                 $scope.isProcessing = true;
 
                 if($scope.uploadForm.data.filetype === 'text/plain') {
