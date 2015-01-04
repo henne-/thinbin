@@ -49,37 +49,33 @@ function validateFileRequirements(filedata) {
         sharedSettings = settings.get('shared'),
         validRetentions = sharedSettings.retentions;
 
-    console.log(filedata);
-
     validRetentions = Object.keys(validRetentions)
         .map(function (key) {
             return validRetentions[key];
         });
 
     // filetype description checks
-    if (!error && filedata.filetype === undefined) {
+    if (!error && filedata.metatype === undefined) {
         error = 'Filetype is missing. Must be binary or plaintext.';
     }
-    if (!error && ['text/plain', 'application/octet-stream'].indexOf(filedata.filetype) === -1) {
+    if (!error && ['text/plain', 'application/octet-stream'].indexOf(filedata.metatype) === -1) {
         error = 'Wrong filetype. Must be binary or plaintext.';
     }
 
     // content checks
 
-    if(!error && filedata.filetype === 'text/plain') {
-        if (!error && filedata.content === undefined) {
-            error = 'Content is not defined.';
-        }
-        if (!error && filedata.content.length > sharedSettings.maxFileSizeBytes) {
-            error = 'Provided content exceeds upload filsize limit.';
-        }
-    } else if (!error) {
-        if (!error && filedata.file === undefined) {
-            error = 'File is not defined.';
-        }
+    if (!error && filedata.attachment === undefined) {
+        error = 'Content is not defined.';
+    }
+    if (!error && filedata.attachment.buffer === undefined) {
+        error = 'Content is empty.';
+    }
+    if (!error && filedata.attachment.buffer.length > sharedSettings.maxFileSizeBytes) {
+        error = 'Provided content exceeds upload filsize limit.';
     }
 
     // retention period checks
+
     if (!error && isNaN(filedata.retentionPeriod)) {
         error = 'Given retention period is not valid.';
     }
@@ -105,22 +101,24 @@ function saveFileById(fileId, filedata) {
 
     var files,
         deferred = Q.defer(),
-        validationError = validateFileRequirements(filedata);
+        validationError = validateFileRequirements(filedata),
+        fileName;
 
     if (validationError) {
         deferred.reject(validationError);
     } else {
+        fileName = filedata.attachment.name || fileId;
         files = {};
-        files[fileId] = {
-            content_type: 'plain/text',
-            data: btoa(filedata.content),
+        files[fileName] = {
+            content_type: filedata.attachment.type,
+            data: filedata.attachment.buffer
         };
 
         pouch.put({
             _id: fileId,
             _attachments: files,
             expiresAt: (filedata.retentionPeriod + Date.now()),
-            filetype: filedata.filetype,
+            metataype: filedata.metatype,
             isPrivate: (filedata.isPrivate === true)
         }).then(function (doc) {
             deferred.resolve(readFile(fileId));
@@ -133,6 +131,23 @@ function saveFileById(fileId, filedata) {
     return deferred.promise;
 }
 
+/**
+ *  Creates a new File Object with Attachments.
+ *
+ *  var file = {
+ *         metatype: string,
+ *         retentionPeriod: number,
+ *         attachment: {
+ *             name: string,
+ *             type: string,
+ *             size: number,
+ *             buffer: Buffer
+ *         }
+ *     };
+ *
+ * @param fileData
+ * @returns {*}
+ */
 function saveFile(fileData) {
     var fileId = generateId();
 
@@ -164,12 +179,17 @@ function readFile(fileId) {
 function readRawFile(fileId) {
     var fileName = String(fileId);
 
-    return pouch.getAttachment(fileId, fileName)
-        .then(function (blob) {
-            return atob(blob);
-        }).catch(function (err) {
-            console.log('ERROR:', err);
-        });
+    return readFile(fileId)
+            .then(function(file) {
+                fileName = Object.keys(file.files)[0];
+
+                return pouch.getAttachment(fileId, fileName)
+                    .then(function (blob) {
+                        return blob;
+                    }).catch(function (err) {
+                        console.log('ERROR:', err);
+                    })
+            });
 }
 
 function readExpiredFilesMeta() {

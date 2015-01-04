@@ -36,7 +36,6 @@ angular.module('io.risu.thinbin.upload')
                     FileService.savePlaintextFile($scope.uploadForm.data)
                         .then(onSuccess, onError);
                 } else {
-                    debugger;
                     $scope.upload = FileService.saveBinaryFile($scope.uploadForm.data, $scope.file)
                         .progress(function(evt) {
                             console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :'+ evt.config.file.name);
@@ -54,7 +53,7 @@ angular.module('io.risu.thinbin.upload')
 
                 function onError(response) {
                     var error = response.data;
-                    debugger;
+
                     $scope.errorMessage = error.message;
                     $scope.isProcessing = false;
 

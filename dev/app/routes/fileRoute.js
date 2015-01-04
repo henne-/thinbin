@@ -21,10 +21,19 @@ function handleGetFile(request, reply) {
 }
 
 function handleGetRawFile(request, reply) {
+    var contentType,
+        fileName;
+
     FileService
-        .readRawFile(request.params.id)
+        .readFile(request.params.id)
+        .then(function(file) {
+            fileName = Object.keys(file.files)[0];
+            contentType = file.files[fileName].contentType;
+
+            return FileService.readRawFile(file.id);
+        })
         .then(function (rawFile) {
-            reply(rawFile);
+            reply(rawFile).type(contentType);
         })
         .catch(function () {
             var error = Boom.create(500, 'unexpected error during raw read process');
@@ -33,8 +42,30 @@ function handleGetRawFile(request, reply) {
 }
 
 function handlePostFile(request, reply) {
+
+    var payload = request.payload;
+    var file = {
+        metatype: payload.filetype,
+        retentionPeriod: payload.retentionPeriod,
+        attachment: {
+            name: undefined,
+            type: undefined,
+            size: undefined,
+            buffer: undefined
+        }
+    };
+
+    if(file.metatype === 'application/octet-stream') {
+        file.attachment        = JSON.parse(payload.file[0])[0];
+        file.attachment.buffer =  payload.file[1];
+    } else if(file.metatype === 'text/plain') {
+        file.attachment.buffer = new Buffer(payload.content);
+        file.attachment.size = file.attachment.buffer.length;
+        file.attachment.type = 'text/plain';
+    }
+
     FileService
-        .saveFile(request.payload)
+        .saveFile(file)
         .then(function (fileDocument) {
             reply(fileDocument);
         })
