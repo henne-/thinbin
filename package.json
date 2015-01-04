@@ -44,7 +44,6 @@
     "karma": "^0.12.3",
     "karma-jasmine": "^0.1.5",
     "karma-ng-html2js-preprocessor": "^0.1.0",
-    "karma-phantomjs-launcher": "^0.1.4",
     "lodash": "^2.4.1",
     "mocha": "^1.21.4",
     "should": "^4.0.4"
