@@ -47,6 +47,7 @@ gulp.task('freeze', function () {
         .pipe(gzip())
         .pipe(gulp.dest('/tmp'));
 });
+
 /* tasks for building the client */
 
 gulp.task('clean-client', function () {
@@ -62,7 +63,7 @@ gulp.task('assets', ['clean-client'], function () {
 
 gulp.task('usemin', ['clean-client'], function () {
     return gulp.src(PATHS.app)
-        .pipe(replace('<!-- gulp:thinbin:templates -->', '<script src="scripts/goldbin.templates.js"></script>'))
+        .pipe(replace('<!-- gulp:thinbin:templates -->', '<script src="scripts/thinbin.templates.js"></script>'))
         .pipe(usemin({
             css: [minifyCss()]
         }))
@@ -79,7 +80,7 @@ gulp.task('templates', ['clean-client'], function () {
 
     var scriptsPath = [PATHS.dist_public, '/scripts'].join('');
 
-    return gulp.src('dev/public/scripts/goldbin/**/*.html')
+    return gulp.src('dev/public/scripts/thinbin/**/*.html')
         .pipe(minifyHtml({
             empty: true,
             spare: true,
@@ -87,10 +88,10 @@ gulp.task('templates', ['clean-client'], function () {
         }))
         .pipe(ngHtml2Js({
             moduleName: 'templates',
-            prefix: 'scripts/goldbin/'
+            prefix: 'scripts/thinbin/'
         }))
         .pipe(uglifyJs())
-        .pipe(concat('goldbin.templates.js'))
+        .pipe(concat('thinbin.templates.js'))
         .pipe(gulp.dest(scriptsPath));
 
 });
