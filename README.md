@@ -21,7 +21,6 @@ which means you can store files locally or in a remote CouchDB.
 You should have an operating system running with NodeJS, NPM, Bower and Gulp preinstalled.
 As long as you have NodeJS and NPM preinsalled the way your operating systems allows it, 
 the rest comes pretty easy by executing `npm install -g bower gulp` in your command prompt.
-```
 
 ## How to Install
 
