@@ -9,20 +9,11 @@
                 Start your upload by clicking on the desired format on the right side, beneath this text.
             </p>
 
-            <p>
-                You can also use drag and drop a file on the colorized area.
-            </p>
         </div>
 
         <div class="dropzones one-half column">
 
             <a class="button button-primary drop-box"
-               ng-file-drop ng-model="files"
-               drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
-               ng-multiple="false"
-               allow-dir="false"
-               accept="{{allowedPlaintextMimes}}"
-               ng-file-change="onUpload('plaintext', files)"
                ng-click="onUpload('plaintext')">
 
                 <span class="fa fa-file-text-o"></span>
@@ -30,12 +21,6 @@
             </a>
 
             <a class="button button-primary drop-box"
-               ng-file-drop ng-model="files"
-               drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
-               ng-multiple="false"
-               allow-dir="false"
-               accept="{{allowedPlaintextMimes}}"
-               ng-file-change="onUpload('binary', files)"
                ng-click="onUpload('binary')">
 
                 <span class="fa fa-paperclip"></span>

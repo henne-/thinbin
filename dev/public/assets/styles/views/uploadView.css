@@ -30,6 +30,13 @@
   letter-spacing: 1px;
 }
 
+.upload.view .method-panel .binary .panel.drop-accepted .button[type="file"] {
+  background-color: #dff0d8;
+}
+
+.upload.view .method-panel .binary .panel.drop-rejected .button[type="file"] {
+  background-color: #f2dede;
+}
 
 /* submit button state */
 

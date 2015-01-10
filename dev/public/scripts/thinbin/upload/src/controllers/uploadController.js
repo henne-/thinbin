@@ -1,7 +1,7 @@
 angular.module('io.risu.thinbin.upload')
     .controller('UploadController',
-    ['$scope', '$routeParams', '$location', '$timeout', 'UploadService', 'FileService', '$upload',
-        function ($scope, $routeParams, $location, $timeout, UploadService, FileService) {
+    ['$scope', '$routeParams', '$location', '$timeout', 'UploadService', 'FileService', 'SettingService',
+        function ($scope, $routeParams, $location, $timeout, UploadService, FileService, SettingService) {
 
             $scope.isProcessing = false;
             $scope.method = $routeParams.method;
@@ -13,6 +13,8 @@ angular.module('io.risu.thinbin.upload')
                 $scope.method = '_' + $scope.method;
             }
 
+            $scope.allowedPlaintextMimes = SettingService.get('allowedPlaintextMimes').join(',');
+            $scope.allowedBinaryMimes    = SettingService.get('allowedBinaryMimes').join(',');
             $scope.displayModes = UploadService.getTranslatedDisplayModes();
             $scope.defaultMode  = $scope.displayModes[$scope.method];
 
@@ -60,5 +62,6 @@ angular.module('io.risu.thinbin.upload')
             $scope.onFileSelected = function onFileSelected(files) {
                 $scope.file = files[0];
             };
+
         }
     ]);

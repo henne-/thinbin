@@ -20,9 +20,15 @@
 
             <div class="binary content row" ng-if="uploadForm.data.filetype === 'application/octet-stream'">
                 <div class="twelve columns">
+
                     <h4>Binary Upload</h4>
 
-                    <div class="panel">
+                    <div class="panel"
+                         drag-over-class="{accept:'drop-accepted', reject:'drop-rejected', delay:100}"
+                         ng-file-drop ng-model="uploadForm.data.file"
+                         ng-file-change="onFileSelected($files, $event)"
+                         ng-multiple="false"
+                         accept="{{allowedBinaryMimes}}">
 
                         <h5 class="instruction" ng-if="!file">
                             Please Select a File to Upload<br/>
@@ -33,11 +39,14 @@
                             <small>(You can upload this file now)</small>
                         </h5>
 
-                        <div class="button button-primay" type="file"
-                        ng-file-select ng-model="uploadForm.data.file"
-                        ng-file-change="onFileSelected($files, $event)"
-                        ng-multiple="false"
-                        accept="*/*">Select File</div>
+                        <div class="button button-primay"
+                             type="file"
+                             drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}"
+                             ng-file-select ng-model="uploadForm.data.file"
+                             ng-file-change="onFileSelected($files, $event)"
+                             ng-multiple="false"
+                             accept="*/*"
+                         >Select File</div>
 
                     </div>
                 </div>
