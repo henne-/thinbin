@@ -1,31 +1,13 @@
-// https://github.com/hoodiehq/hoodie.js/blob/master/src/utils/generate_id.js
-//
-// uuids consist of numbers and lowercase letters only.
-// We stick to lowercase letters to prevent confusion
-// and to prevent issues with CouchDB, e.g. database
-// names only allow for lowercase letters.
+// imports
 
-var exports = module.exports = function(chars) {
-    chars = chars || '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
+var Hashids = require("hashids"),
+    ConfigFactory = require('../services/configFactory');
 
-    return exports.generateId.bind(null, chars);
-};
+// module variables
 
-// helper to generate unique ids.
-exports.generateId = function(chars, length) {
-    var id = '';
-    var radix = chars.length;
+var settings = ConfigFactory.instance(),
+    hashids = new Hashids(settings.get('idSalt'), settings.get('idLength'));
 
-    // default uuid length to 7
-    if (length === undefined) {
-        length = 7;
-    }
-
-    for (var i = 0; i < length; i++) {
-        var rand = Math.random() * radix;
-        var char = chars[Math.floor(rand)];
-        id += String(char).charAt(0);
-    }
-
-    return id;
+module.exports = function() {
+    return hashids.encode(Math.round(Math.random() * 999999999));
 };

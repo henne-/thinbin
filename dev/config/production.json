@@ -3,6 +3,8 @@
     "port": 8001,
     "public": "/public",
     "pouchStore": "/tmp/thinbin",
+    "idSalt":"you probably better change this",
+    "idLength": 6,
 
     "shared": {
         "apiUrl":"http://localhost:8001/api",

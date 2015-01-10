@@ -49,6 +49,9 @@ To do so go and edit `thinbin/dev/config/production.json` to someting similiar l
     // HTTP urls can store into an external CouchDB.
     "pouchStore": "/tmp/thinbin",
 
+    "idSalt":"you probably better change this",
+    "idLength": 6,
+
     // These are the settings, the angular client will get in the frontend.
     // You do better by NOT placing sensitive content here.
     "shared": {

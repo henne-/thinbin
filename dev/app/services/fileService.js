@@ -6,7 +6,7 @@ var PouchDB = require('pouchdb'),
     Q = require('q'),
     atob = require('atob'),
     btoa = require('btoa'),
-    generateId = require('../utils/generateId')(),
+    generateId = require('../utils/generateId'),
     ConfigFactory = require('../services/configFactory');
 
 // module instances
