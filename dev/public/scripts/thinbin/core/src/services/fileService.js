@@ -37,13 +37,14 @@ angular.module('io.risu.thinbin.core')
         }
 
         function saveBinaryFile(formdata, upload) {
+            formdata.filename = upload.name;
+            formdata.mimetype = upload.type;
 
             return $upload.upload({
                 url: '/api/file',
                 method: 'POST',
                 data: formdata,
-                file: upload,
-                fileName: upload.name
+                file: upload
             });
         }
 

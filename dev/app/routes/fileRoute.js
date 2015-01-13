@@ -71,6 +71,7 @@ function handleGetDownloadArchive(request, reply) {
 function handlePostFile(request, reply) {
 
     var payload = request.payload;
+
     var file = {
         metatype: payload.filetype,
         retentionPeriod: payload.retentionPeriod,
@@ -84,6 +85,8 @@ function handlePostFile(request, reply) {
 
     if(file.metatype === 'application/octet-stream') {
         file.attachment        = JSON.parse(payload.file[0])[0];
+        file.attachment.name   = payload.filename;
+        file.attachment.type   = payload.mimetype;
         file.attachment.buffer =  payload.file[1];
     } else if(file.metatype === 'text/plain') {
         file.attachment.buffer = new Buffer(payload.content);
