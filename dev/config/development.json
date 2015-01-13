@@ -1,5 +1,6 @@
 {
     "hostname": "localhost",
+    "address": "0.0.0.0",
     "public": "/public",
 
     "shared": {
