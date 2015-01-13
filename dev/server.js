@@ -22,9 +22,11 @@ function startApplication(config) {
 
     console.log('hostname: \t', hostname);
     console.log('port: \t\t', port);
+    console.log('address: \t', address);
 
     server.connection({
         host: hostname,
+        address: address,
         port: port
     });
 
