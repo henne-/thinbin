@@ -18,6 +18,7 @@ function startApplication(config) {
     FileService = require(__dirname + '/app/services/fileService.js');
 
     var hostname = config.get('hostname'),
+        address  = config.get('address'),
         port     = config.get('port');
 
     console.log('hostname: \t', hostname);
